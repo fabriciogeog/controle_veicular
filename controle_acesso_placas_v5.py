@@ -126,7 +126,7 @@ def gestao_resultado(resultado, placa_conf, quadros):
             cv2.putText(quadros, placa_conf, (25, 150), fonte3, 2, VERDE, 2, cv2.LINE_AA)
             caminho = f"fotos_placas/{placa_conf}{DATA}" + ".jpg"
             foto_placa(caminho, quadros)
-            # registro_placas(resultado)
+            registro_placa(resultado, placa_conf)
 
     else:
         if placa_conf not in lista_nao_placas:
@@ -136,7 +136,7 @@ def gestao_resultado(resultado, placa_conf, quadros):
             cv2.putText(quadros, placa_conf, (25, 150), fonte3, 2, VERMELHO, 2, cv2.LINE_AA)
             caminho = f"fotos_placas_nc/{placa_conf}{DATA}" + ".jpg"
             foto_placa(caminho, quadros)
-            # registro_placas(resultado)
+            registro_placa(resultado, placa_conf)
 
 
 def qualidade_leitura(placa_lida):
@@ -153,6 +153,17 @@ def qualidade_leitura(placa_lida):
 def foto_placa(caminho, quadros):
     """Função para captura da foto da placa lida."""
     cv2.imwrite(caminho, quadros)
+
+
+def registro_placa(resultado, placa_conf):
+    """Função destina-se a realizar o registro dos dados da placa capturada."""
+    with open('arquivos_csv/registro_placas.csv', 'a', newline='') as f:
+        writer = csv.writer(f)
+        if resultado is None:
+            writer.writerow(['','',placa_conf,'','', '', DATA])
+        else:
+            resultado = resultado + (DATA,)
+            writer.writerow(resultado)
 
 
 def consulta_api_denatran():
